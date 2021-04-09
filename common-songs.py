@@ -59,7 +59,7 @@ def commonSongsUsersThread(userid: str, tracksss: List, executor: ThreadPoolExec
     trackss = []
     futures = []
     for playlist in playlists:
-        if playlist['owner']['id'] != userid or "Top Songs of " in playlist['name']:
+        if playlist['owner']['id'] != userid or "Top Songs of " in playlist['name'] or playlist['id'] == '5eS0KgG63Opb1EqOE63Gpa':
             continue
 
         futures.append(executor.submit(appendTracksFromItem, playlist, trackss))
