@@ -1,0 +1,8 @@
+*.vim
+*.pyc
+*log
+.env
+/.vscode/**
+*.json
+*.sh
+.DS_Store
