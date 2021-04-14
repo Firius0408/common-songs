@@ -102,6 +102,7 @@ def commonSongsUsers(userids: str, playlistid: str) -> str:
     if newtracksset:
         print('Adding to playlist...')
         botuser.addSongsToPlaylist(playlistid, list(newtracksset))
+        changes.append(userids)
         print('Finished')
     else:
         print('Playlist already up to date')
@@ -130,6 +131,12 @@ else:
     with open('./data.json') as json_file:
         data = json.load(json_file)
 
+changes = []
 print('Starting at %s\n' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
 commonSongsUsersAll()
+if changes:
+    print('Playlists for the following users have changed:')
+    for userids in changes:
+        print(', '.join(userids))
+
 print('\nFinished at %s' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
