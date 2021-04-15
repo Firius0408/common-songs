@@ -1,6 +1,6 @@
 # Common Songs App
 
-Simple python script to update playlits containing common songs between users
+Simple python script to update playlists containing common songs between users
 
 ## Setup
 
