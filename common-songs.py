@@ -75,13 +75,11 @@ def commonSongsUsers(userids: str, playlistid: str) -> str:
 
     print('Pulling songs...')
     tracksss = []
-    executor = ThreadPoolExecutor()
     futures = []
     for userid in userids:
         futures.append(executor.submit(commonSongsUsersThread, userid, tracksss, executor))
 
     wait(futures)
-    executor.shutdown()
     print('Finding common songs...')
     trackuri = []
     for trackss in tracksss:
@@ -133,10 +131,12 @@ else:
 
 changes = []
 print('Starting at %s\n' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
+executor = ThreadPoolExecutor()
 commonSongsUsersAll()
 if changes:
     print('Playlists for the following users have changed:')
     for userids in changes:
         print(', '.join(userids))
 
+executor.shutdown()
 print('\nFinished at %s' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
