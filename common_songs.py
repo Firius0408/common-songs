@@ -125,18 +125,19 @@ botuser = sp.getAuthUser(refreshtoken)
 if __name__ == '__main__':
     with open(sys.path[0] + '/data.json') as json_file:
         data = json.load(json_file)
+
+    changes = []
+    print('Starting at %s\n' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
+    executor = ThreadPoolExecutor()
+    commonSongsUsersAll()
+    if changes:
+        print('\nPlaylists for the following users have changed:')
+        for userids in changes:
+            print(', '.join(userids))
+
+    executor.shutdown()
+    print('\nFinished at %s' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
+
 else:
     with open('./data.json') as json_file:
         data = json.load(json_file)
-
-changes = []
-print('Starting at %s\n' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
-executor = ThreadPoolExecutor()
-commonSongsUsersAll()
-if changes:
-    print('\nPlaylists for the following users have changed:')
-    for userids in changes:
-        print(', '.join(userids))
-
-executor.shutdown()
-print('\nFinished at %s' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
