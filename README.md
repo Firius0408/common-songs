@@ -21,8 +21,8 @@ pipenv install
 
 ## Updating Playlists
 
-The `common-songs.py` script scans for songs added to a user and adds it to the playlist
+The `common_songs.py` script scans for songs added to a user and adds it to the playlist
 
-`pipenv run python3 common-songs.py`
+`pipenv run python3 common_songs.py`
 
 Copyright © Brian Cheng 2021
