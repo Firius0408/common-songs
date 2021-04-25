@@ -67,7 +67,7 @@ def commonSongsUsersThread(userid: str, tracksss: List, executor: ThreadPoolExec
     wait(futures)
     tracksss.append(trackss)
 
-def commonSongsUsers(userids: str, playlistid: str) -> str:
+def commonSongsUsers(userids: List[str], playlistid: str = None) -> None:
     userids = [i.replace('spotify:user:', '') for i in userids]
     if len(userids) < 2:
         print('You need at least 2 users bruh')
@@ -93,21 +93,37 @@ def commonSongsUsers(userids: str, playlistid: str) -> str:
     if None in commonuri:
         commonuri.remove(None)
 
-    tempplaylist = sp.getPlaylistFromId(playlistid)
-    playlisttracks = getTracksFromItem(tempplaylist)
-    playlisttracksset = {i['track']['uri'] for i in playlisttracks}
-    newtracksset = commonuri - playlisttracksset
-    if newtracksset:
-        print('Adding to playlist...')
-        botuser.addSongsToPlaylist(playlistid, list(newtracksset))
-        changes.append(userids)
-        print('Finished')
+    if (playlistid):
+        tempplaylist = sp.getPlaylistFromId(playlistid)
+        playlisttracks = getTracksFromItem(tempplaylist)
+        playlisttracksset = {i['track']['uri'] for i in playlisttracks}
+        newtracksset = commonuri - playlisttracksset
+        if newtracksset:
+            print('Adding to playlist...')
+            botuser.addSongsToPlaylist(playlistid, list(newtracksset))
+            changes.append(userids)
+            print('Finished')
+        else:
+            print('Playlist already up to date')
     else:
-        print('Playlist already up to date')
+        names = [getUser(i)['display_name'] for i in userids]
+        name = 'Common Songs between ' + ' and '.join(names)
+        print('Creating playlist...')
+        playlistid = botuser.createPlaylist(name)['id']
+        commonsongs.append((userids, playlistid))
+        data['commonsongs'] = commonsongs
+        if __name__ == '__main__':
+            with open(sys.path[0] + '/data.json') as f:
+                json.dump(data, f, indent=4, separators=(',', ': '))
+        else:
+            with open('./data.json') as f:
+                json.dump(data, f, indent=4, separators=(',', ': '))
+
+        botuser.addSongsToPlaylist(playlistid, list(commonuri))
+        print('Playlist created\nid: %s' % playlistid)
 
 
 def commonSongsUsersAll() -> None:
-    commonsongs = data['commonsongs']
     for commonsong in commonsongs:
         while True:
             print(', '.join(commonsong[0]))
@@ -126,6 +142,7 @@ if __name__ == '__main__':
     with open(sys.path[0] + '/data.json') as json_file:
         data = json.load(json_file)
 
+    commonsongs = data['commonsongs']
     changes = []
     print('Starting at %s\n' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
     executor = ThreadPoolExecutor()
@@ -141,3 +158,5 @@ if __name__ == '__main__':
 else:
     with open('./data.json') as json_file:
         data = json.load(json_file)
+
+    commonsongs = data['commonsongs']

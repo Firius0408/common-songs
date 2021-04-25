@@ -19,6 +19,12 @@ python3 -m pip install pipenv
 pipenv install
 ```
 
+## Adding Common Song Users
+
+Furthermore, `add_users.py` can be used to add new users/playlist to `data.json`.
+
+`pipenv run python3 add_users.py user1 user2 user3 ...`
+
 ## Updating Playlists
 
 The `common_songs.py` script scans for songs added to a user and adds it to the playlist
