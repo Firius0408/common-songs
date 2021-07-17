@@ -53,7 +53,7 @@ def appendTracksFromItem(playlist: Dict, tracks: List[Dict]) -> None:
         tracks.append(temp)
 
 
-def commonSongsUsersThread(userid: str, tracksss: List, executor: ThreadPoolExecutor):
+def commonSongsUsersThread(userid: str, tracksss: List):
     user = getUser(userid)
     playlists = getUserPlaylists(user)
     trackss = []
@@ -77,7 +77,7 @@ def commonSongsUsers(userids: List[str], playlistid: str = None) -> None:
     tracksss = []
     futures = []
     for userid in userids:
-        futures.append(executor.submit(commonSongsUsersThread, userid, tracksss, executor))
+        futures.append(executor.submit(commonSongsUsersThread, userid, tracksss))
 
     wait(futures)
     print('Finding common songs...')
