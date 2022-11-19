@@ -113,10 +113,10 @@ def commonSongsUsers(userids: List[str], playlistid: str = None) -> None:
         commonsongs.append((userids, playlistid))
         data['commonsongs'] = commonsongs
         if __name__ == '__main__':
-            with open(sys.path[0] + '/data.json') as f:
+            with open(sys.path[0] + '/data.json', 'w') as f:
                 json.dump(data, f, indent=4, separators=(',', ': '))
         else:
-            with open('./data.json') as f:
+            with open('./data.json', 'w') as f:
                 json.dump(data, f, indent=4, separators=(',', ': '))
 
         botuser.addSongsToPlaylist(playlistid, list(commonuri))
@@ -138,6 +138,7 @@ def commonSongsUsersAll() -> None:
 sp = spotifywebapi.Spotify(os.getenv('SPOTIFY_CLIENT_ID'), os.getenv('SPOTIFY_CLIENT_SECRET'))
 refreshtoken = os.getenv('SPOTIFY_REFRESHTOKEN')
 botuser = sp.getAuthUser(refreshtoken)
+executor = ThreadPoolExecutor()
 if __name__ == '__main__':
     with open(sys.path[0] + '/data.json') as json_file:
         data = json.load(json_file)
@@ -145,7 +146,6 @@ if __name__ == '__main__':
     commonsongs = data['commonsongs']
     changes = []
     print('Starting at %s\n' % datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
-    executor = ThreadPoolExecutor()
     commonSongsUsersAll()
     if changes:
         print('\nPlaylists for the following users have changed:')
